@@ -1,0 +1,9 @@
+<!doctype html>
+<html><head><title>Extracted Rows</title><link rel="stylesheet" href="/static/styles.css"></head>
+<body><main>
+  <h1>Extracted Rows</h1><p class="muted">{{ version }}</p>
+  <p><a class="button" href="/">Back to Dashboard</a> <a class="button" href="/export">Download Excel Export</a></p>
+  <form method="get" action="/rows" class="search"><input name="q" value="{{ q }}" placeholder="Search title or raw text"><button>Search</button></form>
+  <table><tr><th>District</th><th>Category</th><th>Possible Title</th><th>Min</th><th>Mid</th><th>Max</th><th>Raw Text</th></tr>
+  {% for r in rows %}<tr><td>{{ r.district }}</td><td>{{ r.category }}</td><td>{{ r.possible_title }}</td><td>{{ r.min_salary }}</td><td>{{ r.mid_salary }}</td><td>{{ r.max_salary }}</td><td>{{ r.raw_text }}</td></tr>{% endfor %}</table>
+</main></body></html>

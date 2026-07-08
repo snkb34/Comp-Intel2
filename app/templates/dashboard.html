@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <title>K-12 Compensation Intelligence</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main>
+    <h1>K-12 Compensation Intelligence</h1>
+    <p class="muted">{{ version }}</p>
+    <section class="cards">
+      <div class="card"><strong>{{ districts|length }}</strong><span>District Sources</span></div>
+      <div class="card"><strong>{{ rows_count }}</strong><span>Extracted Rows</span></div>
+      <div class="card"><strong>{{ docs|length }}</strong><span>Recent Documents</span></div>
+    </section>
+
+    <section class="panel">
+      <h2>Add a District Source</h2>
+      <form method="post" action="/districts/add" class="grid">
+        <input name="name" placeholder="District" required>
+        <input name="state" placeholder="State" value="CO">
+        <input name="category" placeholder="Category, e.g. Licensed/Admin">
+        <input name="website" placeholder="Specific salary schedule URL" required>
+        <button type="submit">Add Source</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>Upload District CSV</h2>
+      <form method="post" action="/districts/upload" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required>
+        <label><input type="checkbox" name="replace" value="true"> Replace existing district list</label>
+        <button type="submit">Upload CSV</button>
+      </form>
+      <p class="muted">Expected columns: District, State, Website, Category</p>
+    </section>
+
+    <section class="panel actions">
+      <form method="post" action="/run"><button class="primary" type="submit">Run Update</button></form>
+      <a class="button" href="/rows">Search Extracted Rows</a>
+      <a class="button" href="/export">Download Excel Export</a>
+      <form method="post" action="/clear-results"><button class="danger" type="submit">Clear Results</button></form>
+    </section>
+
+    <section class="panel">
+      <h2>District Sources</h2>
+      <table>
+        <tr><th>District</th><th>State</th><th>Category</th><th>URL</th></tr>
+        {% for d in districts %}<tr><td>{{ d.name }}</td><td>{{ d.state }}</td><td>{{ d.category }}</td><td class="url">{{ d.website }}</td></tr>{% endfor %}
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Recent Runs</h2>
+      <table><tr><th>Status</th><th>Message</th><th>Started</th><th>Finished</th></tr>
+      {% for r in runs %}<tr><td>{{ r.status }}</td><td>{{ r.message }}</td><td>{{ r.started_at }}</td><td>{{ r.finished_at }}</td></tr>{% endfor %}</table>
+    </section>
+
+    <section class="panel">
+      <h2>Recent Source Documents</h2>
+      <table><tr><th>Status</th><th>Category</th><th>Message</th><th>Source</th></tr>
+      {% for doc in docs %}<tr><td>{{ doc.status }}</td><td>{{ doc.category }}</td><td>{{ doc.message }}</td><td class="url">{{ doc.source_url }}</td></tr>{% endfor %}</table>
+    </section>
+  </main>
+</body>
+</html>
